@@ -1,30 +1,26 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div>
+    <Header></Header>
+    <router-view></router-view>
+    <Footer v-if="$route.meta.show"></Footer>
+  </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Header from "@/components/Header/index.vue";
+import Footer from "@/components/Footer/index.vue";
 
-nav {
-  padding: 30px;
+import { mapActions, mapState, useStore } from "vuex";
+export default {
+  components: {
+    Header,
+    Footer,
+  },
+  setup() {
+    const store = useStore();
+    store.dispatch("categoryList");
+  },
+};
+</script>
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+<style lang="less" scoped></style>

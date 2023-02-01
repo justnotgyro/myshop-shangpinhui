@@ -104,12 +104,22 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @blur="changeSkuNum"
+                />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : 1"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a @click="addShopcar">加入购物车</a>
               </div>
             </div>
           </div>
@@ -351,7 +361,7 @@
 import ImageList from "./ImageList/ImageList";
 import Zoom from "./Zoom/Zoom";
 
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
@@ -366,6 +376,7 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
+    const router = useRouter();
     store.dispatch("goodsInfo", route.params.skuid);
     const categoryView = computed(() => store.getters.categoryView);
     const skuInfo = computed(() => store.getters.skuInfo);
@@ -376,11 +387,47 @@ export default {
       });
       current.isChecked = "1";
     };
+    const skuNum = ref(1);
+    const changeSkuNum = () => {
+      // 如果v-model加了修饰符.number那么这里获取到的skuNum.value就一定是数字
+      const value = skuNum.value * 1;
+      if (isNaN(value) || skuNum.value < 1) {
+        skuNum.value = 1;
+      } else {
+        skuNum.value = value;
+      }
+    };
+    const addShopcar = () => {
+      store
+        .dispatch("addOrUpdateShopCart", {
+          skuId: skuInfo.value.id,
+          skuNum: skuNum.value,
+        })
+        .then((res) => {
+          router.push({
+            name: "addcartsuccess",
+          });
+          sessionStorage.setItem(
+            "SKUINFO",
+            JSON.stringify({
+              skuNum: skuNum.value,
+              skuDefaultImg: skuInfo.value.skuDefaultImg,
+              skuName: skuInfo.value.skuName,
+            })
+          );
+        })
+        .catch((err) => {
+          alert("加入购物车失败！");
+        });
+    };
     return {
       categoryView,
       skuInfo,
       spuSaleAttrList,
       changeActive,
+      skuNum,
+      changeSkuNum,
+      addShopcar,
     };
   },
 };

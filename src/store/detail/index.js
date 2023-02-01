@@ -1,4 +1,4 @@
-import { reqGoodsInfo } from "@/api";
+import { reqGoodsInfo, reqAddOrUpdateShopCart } from "@/api";
 export default {
   state() {
     return {
@@ -25,6 +25,16 @@ export default {
     async goodsInfo({ commit }, skuid) {
       let result = await reqGoodsInfo(skuid);
       commit("GOODSINFO", result.data);
+    },
+    async addOrUpdateShopCart({ commit }, { skuId, skuNum }) {
+      let result = await reqAddOrUpdateShopCart(skuId, skuNum);
+      return new Promise((resolve, reject) => {
+        if (result.code === 200) {
+          resolve("OK");
+        } else {
+          reject("fail");
+        }
+      });
     },
   },
 };

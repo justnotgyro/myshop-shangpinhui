@@ -37,3 +37,10 @@ export const reqGoodsInfo = (skuid) => {
     data: skuid,
   });
 };
+
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
+  return requests({
+    url: `/api/cart/addToCart/${skuId}/${skuNum}`,
+    method: "POST",
+  });
+};

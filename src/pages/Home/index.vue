@@ -37,6 +37,7 @@ export default {
   setup() {
     const store = useStore();
     store.dispatch("floorList");
+    store.dispatch("categoryList");
     const floorList = computed(() => store.state.home.floorList);
     return { floorList };
   },

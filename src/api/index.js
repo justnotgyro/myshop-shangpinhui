@@ -44,3 +44,10 @@ export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
     method: "POST",
   });
 };
+
+export const reqCartList = () => {
+  return requests({
+    url: "/api/cart/cartList",
+    method: "GET",
+  });
+};

@@ -2,6 +2,8 @@ import axios from "axios";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
 
+const guestId = localStorage.getItem("GUESTID");
+
 const requests = axios.create({
   baseURL: "http://gmall-h5-api.atguigu.cn",
   timeout: 5000,
@@ -9,6 +11,7 @@ const requests = axios.create({
 
 requests.interceptors.request.use((config) => {
   nProgress.start();
+  config.headers.userTempId = guestId;
   return config;
 });
 requests.interceptors.response.use(

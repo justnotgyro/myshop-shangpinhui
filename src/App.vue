@@ -10,16 +10,12 @@
 import Header from "@/components/Header/index.vue";
 import Footer from "@/components/Footer/index.vue";
 
-import { mapActions, mapState, useStore } from "vuex";
 export default {
   components: {
     Header,
     Footer,
   },
-  setup() {
-    const store = useStore();
-    store.dispatch("categoryList");
-  },
+  setup() {},
 };
 </script>
 

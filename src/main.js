@@ -7,10 +7,11 @@ import store from "./store";
 import TypeNav from "@/components/TypeNav";
 import Carousel from "@/components/Carousel";
 import Pagination from "@/components/Pagination";
+
 import "@/mock/mockServe";
+import "@/utils/getNanoid";
 
 const app = createApp(App);
-
 app.component("TypeNav", TypeNav);
 app.component("Carousel", Carousel);
 app.component("Pagination", Pagination);

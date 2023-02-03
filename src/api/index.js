@@ -51,3 +51,17 @@ export const reqCartList = () => {
     method: "GET",
   });
 };
+
+export const reqDeleteCartById = (skuId) => {
+  return requests({
+    url: `/api/cart/deleteCart/${skuId}`,
+    method: "DELETE",
+  });
+};
+
+export const reqUpdateCheckedById = (skuId, isChecked) => {
+  return requests({
+    url: `/api/cart/checkCart/${skuId}/${isChecked}`,
+    method: "GET",
+  });
+};

@@ -251,7 +251,12 @@ export default {
           }
         }
         .item:hover {
-          background-color: skyblue;
+          background-color: #e1251b;
+          h3 {
+            a {
+              color: #fff;
+            }
+          }
         }
       }
     }

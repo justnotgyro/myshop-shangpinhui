@@ -20,6 +20,7 @@
               type="checkbox"
               name="chk_list"
               :checked="cartInfo.isChecked === 1"
+              @change="updateChecked(`${cartInfo.skuId}`, $event)"
             />
           </li>
           <li class="cart-list-con2">
@@ -35,21 +36,39 @@
             <span class="price">￥{{ cartInfo.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="handler(cartInfo.skuId, -1, cartInfo.skuNum)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
               :value="cartInfo.skuNum"
               minnum="1"
               class="itxt"
+              @change="
+                handler(
+                  cartInfo.skuId,
+                  0,
+                  cartInfo.skuNum,
+                  $event.target.value * 1
+                )
+              "
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="handler(cartInfo.skuId, 1, cartInfo.skuNum)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">￥{{ cartInfo.skuPrice * cartInfo.skuNum }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a class="sindelet" @click="deleteCartById(cartInfo.skuId)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -59,11 +78,16 @@
     <div class="cart-tool">
       <div class="operate">
         <div class="select-all">
-          <input type="checkbox" id="chooseAll" :checked="isAllChecked" />
+          <input
+            type="checkbox"
+            id="chooseAll"
+            :checked="isAllChecked"
+            @change="updateAllIsChecked"
+          />
           <label for="chooseAll">全选</label>
         </div>
         <div class="option">
-          <a href="#none">删除选中的商品</a>
+          <a @click="deleteAllChecked">删除选中的商品</a>
           <a href="#none">移到我的关注</a>
           <a href="#none">清除下柜商品</a>
         </div>
@@ -106,10 +130,84 @@ export default {
     const isAllChecked = computed(() =>
       cartInfoList.value.every((cartInfo) => cartInfo.isChecked === 1)
     );
+    const handler = async (skuId, type, value, num) => {
+      let skuNum = 0;
+      switch (type) {
+        case -1:
+          // 快速连续点击时数量可以变成负，因为此时网络请求的结果还没返回，所以cartInfo.skuNum没来得及变化，即value没变
+          if (value <= 1) {
+            return;
+          }
+          skuNum = -1;
+          break;
+        case 0:
+          // if输入非数字或小于1
+          if (isNaN(num) || num < 1 || num % 1 !== 0) {
+            skuNum = 0;
+          } else {
+            skuNum = num - value;
+          }
+
+          break;
+        case 1:
+          skuNum = 1;
+          break;
+      }
+      await store.dispatch("addOrUpdateShopCart", { skuId, skuNum });
+      await store.dispatch("cartList");
+    };
+    const deleteCartById = (skuId) => {
+      store
+        .dispatch("deleteCartById", skuId)
+        .then(() => {
+          store.dispatch("cartList");
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    const updateChecked = async (skuId, e) => {
+      let isChecked = e.target.checked ? "1" : "0";
+      await store
+        .dispatch("updateCheckedById", { skuId, isChecked })
+        .then(() => {
+          store.dispatch("cartList");
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    const deleteAllChecked = () => {
+      store
+        .dispatch("deleteAllChecked")
+        .then(() => {
+          store.dispatch("cartList");
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    const updateAllIsChecked = async (e) => {
+      console.log(e.target.checked);
+      let isChecked = e.target.checked ? "1" : "0";
+      await store
+        .dispatch("updateAllIsChecked", isChecked)
+        .then(() => {
+          store.dispatch("cartList");
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
     return {
       cartInfoList,
       totalPrice,
       isAllChecked,
+      handler,
+      deleteCartById,
+      updateChecked,
+      deleteAllChecked,
+      updateAllIsChecked,
     };
   },
 };

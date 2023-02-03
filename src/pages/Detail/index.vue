@@ -391,7 +391,7 @@ export default {
     const changeSkuNum = () => {
       // 如果v-model加了修饰符.number那么这里获取到的skuNum.value就一定是数字
       const value = skuNum.value * 1;
-      if (isNaN(value) || skuNum.value < 1) {
+      if (isNaN(value) || skuNum.value < 1 || value % 1 !== 0) {
         skuNum.value = 1;
       } else {
         skuNum.value = value;

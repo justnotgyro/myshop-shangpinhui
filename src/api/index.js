@@ -65,3 +65,18 @@ export const reqUpdateCheckedById = (skuId, isChecked) => {
     method: "GET",
   });
 };
+
+export const reqGetCode = (phone) => {
+  return requests({
+    url: `/api/user/passport/sendCode/${phone}`,
+    method: "GET",
+  });
+};
+
+export const reqUserRegister = (data) => {
+  return requests({
+    url: `/api/user/passport/register`,
+    method: "POST",
+    data,
+  });
+};

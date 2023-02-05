@@ -33,7 +33,7 @@
             <div class="item-txt">&nbsp;</div>
           </li>
           <li class="cart-list-con4">
-            <span class="price">￥{{ cartInfo.skuPrice }}</span>
+            <span class="price">￥{{ cartInfo.cartPrice }}</span>
           </li>
           <li class="cart-list-con5">
             <a
@@ -65,7 +65,9 @@
             >
           </li>
           <li class="cart-list-con6">
-            <span class="sum">￥{{ cartInfo.skuPrice * cartInfo.skuNum }}</span>
+            <span class="sum"
+              >￥{{ cartInfo.cartPrice * cartInfo.skuNum }}</span
+            >
           </li>
           <li class="cart-list-con7">
             <a class="sindelet" @click="deleteCartById(cartInfo.skuId)">删除</a>
@@ -94,7 +96,9 @@
       </div>
       <div class="money-box">
         <div class="sumInfo">
-          <div class="chosed">已选择 <span>0</span>件商品</div>
+          <div class="chosed">
+            已选择 <span>{{ checkedNum }}</span> 件商品
+          </div>
           <div class="sumprice">
             <em>总价（不含运费） ：</em>
             <i class="summoney">￥{{ totalPrice }}</i>
@@ -122,14 +126,14 @@ export default {
       let sum = 0;
       cartInfoList.value.forEach((cartInfo) => {
         if (cartInfo.isChecked === 1) {
-          sum += cartInfo.skuPrice * cartInfo.skuNum;
+          sum += cartInfo.cartPrice * cartInfo.skuNum;
         }
       });
       return sum;
     });
-    const isAllChecked = computed(() => {
-      return cartInfoList.value.every((cartInfo) => cartInfo.isChecked === 1);
-    });
+    const isAllChecked = computed(() =>
+      cartInfoList.value.every((cartInfo) => cartInfo.isChecked === 1)
+    );
     const handler = async (skuId, type, value, num) => {
       let skuNum = 0;
       switch (type) {
@@ -198,6 +202,13 @@ export default {
           alert(err);
         });
     };
+    const checkedNum = computed(() => {
+      let num = 0;
+      cartInfoList.value.forEach((el) => {
+        num = el.isChecked === 1 ? num + 1 : num;
+      });
+      return num;
+    });
     return {
       cartInfoList,
       totalPrice,
@@ -207,6 +218,7 @@ export default {
       updateChecked,
       deleteAllChecked,
       updateAllIsChecked,
+      checkedNum,
     };
   },
 };

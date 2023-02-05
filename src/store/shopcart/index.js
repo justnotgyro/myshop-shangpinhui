@@ -52,7 +52,6 @@ export default {
       return Promise.all(promiseArr);
     },
     async updateAllIsChecked({ getters, dispatch }, isChecked) {
-      console.log(isChecked);
       let promiseArr = [];
       getters.cartInfoList.forEach((element) => {
         let promise = dispatch("updateCheckedById", {

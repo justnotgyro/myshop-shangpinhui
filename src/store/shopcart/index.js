@@ -52,9 +52,15 @@ export default {
       return Promise.all(promiseArr);
     },
     async updateAllIsChecked({ getters, dispatch }, isChecked) {
+      console.log(isChecked);
       let promiseArr = [];
-      await getters.cartInfoList.forEach((element) => {
-        dispatch("updateCheckedById", { skuId: element.skuId, isChecked });
+      getters.cartInfoList.forEach((element) => {
+        let promise = dispatch("updateCheckedById", {
+          skuId: element.skuId,
+          isChecked,
+        });
+        // 找了半天的bug发现其实是这里根本没有push promise！！！
+        promiseArr.push(promise);
       });
       return Promise.all(promiseArr);
     },

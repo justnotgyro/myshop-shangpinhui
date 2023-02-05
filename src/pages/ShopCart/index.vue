@@ -127,9 +127,9 @@ export default {
       });
       return sum;
     });
-    const isAllChecked = computed(() =>
-      cartInfoList.value.every((cartInfo) => cartInfo.isChecked === 1)
-    );
+    const isAllChecked = computed(() => {
+      return cartInfoList.value.every((cartInfo) => cartInfo.isChecked === 1);
+    });
     const handler = async (skuId, type, value, num) => {
       let skuNum = 0;
       switch (type) {
@@ -188,7 +188,6 @@ export default {
         });
     };
     const updateAllIsChecked = async (e) => {
-      console.log(e.target.checked);
       let isChecked = e.target.checked ? "1" : "0";
       await store
         .dispatch("updateAllIsChecked", isChecked)

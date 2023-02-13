@@ -80,3 +80,61 @@ export const reqUserRegister = (data) => {
     data,
   });
 };
+
+export const reqUserLogin = (data) => {
+  return requests({
+    url: `/api/user/passport/login`,
+    method: "POST",
+    data,
+  });
+};
+
+export const reqUserInfo = () => {
+  return requests({
+    url: `/api/user/passport/auth/getUserInfo`,
+    method: "GET",
+  });
+};
+
+export const reqLogout = () => {
+  return requests({
+    url: `/api/user/passport/logout`,
+    method: "GET",
+  });
+};
+
+export const reqAddressInfo = () => {
+  return requests({
+    url: `/api/user/userAddress/auth/findUserAddressList`,
+    method: "GET",
+  });
+};
+
+export const reqOrderInfo = () => {
+  return requests({
+    url: `/api/order/auth/trade`,
+    method: "GET",
+  });
+};
+
+export const reqSubmitOrder = (data) => {
+  return requests({
+    url: `/api/order/auth/submitOrder?tradeNo=${data.tradeNo}`,
+    method: "POST",
+    data,
+  });
+};
+
+export const reqPayInfo = (orderId) => {
+  return requests({
+    url: `/api/payment/weixin/createNative/${orderId}`,
+    method: "GET",
+  });
+};
+
+export const reqPayStatus = (orderId) => {
+  return requests({
+    url: `/api/payment/weixin/queryPayStatus/${orderId}`,
+    method: "GET",
+  });
+};

@@ -5,10 +5,14 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="!userName">
             <span>请</span>
             <router-link to="/login">登录</router-link>
             <router-link class="register" to="/register">免费注册</router-link>
+          </p>
+          <p v-else>
+            <a>{{ userName }}</a>
+            <a class="register" @click="logout">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -53,7 +57,8 @@
 
 <script>
 import router from "@/router";
-import { ref, onMounted } from "vue";
+import store from "@/store";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 export default {
   setup() {
@@ -67,9 +72,23 @@ export default {
       });
       keyword.value = "";
     };
+    const userName = computed(() => store.state.user.userInfo?.name);
+    const logout = async () => {
+      await store
+        .dispatch("logout")
+        .then(() => {
+          router.push("/home");
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+
     return {
       goSearch,
       keyword,
+      userName,
+      logout,
     };
   },
 };

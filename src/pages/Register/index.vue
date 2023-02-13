@@ -105,7 +105,6 @@ export default {
         await store
           .dispatch("userRegister", { phone, password, code })
           .then((res) => {
-            console.log(res);
             router.push("/login");
           })
           .catch((err) => {

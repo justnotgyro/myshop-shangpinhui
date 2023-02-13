@@ -11,6 +11,8 @@ import Pagination from "@/components/Pagination";
 import "@/mock/mockServe";
 import "@/utils/getNanoid";
 
+// import * as API from "@/api";
+
 const app = createApp(App);
 app.component("TypeNav", TypeNav);
 app.component("Carousel", Carousel);
